@@ -7,13 +7,20 @@ import pyttsx3
 # ===========================================================================
 # Command sequences
 
-seq_0 = [ "R", "ping 34\n" ]             # seq 0
+seq_0 = [               # seq 0
+    [ "R", "ping 0 34\n" ] 
+]
  
-seq_1 = [ "R", "ping 41\n" ,             # seq 1
-          "R", "servo 9 0 4 +30\n" ]  
+seq_1 = [              # seq 1
+    [ "R", "ping 0 41\n" ] ,
+    [ "R", "servo 9 0 4 30\n" ] ,
+    [ "L", "say", "Hello jim"]
+]
 
-seq_2 = [ "R", "ping 51\n" ,             # seq 2
-          "L", "say", "Hello jim"]
+seq_2 = [             # seq 2
+    [ "R", "ping 0 51\n" ] ,
+    [ "L", "say", "Hello jim"]
+]
 
 seq_list = [seq_0, seq_1, seq_2]
 
@@ -31,15 +38,19 @@ class sequence:
         self.nos_commands = len(seq_list[seq_index])
         status = ErrorCode.OK
         for i in range(self.nos_commands):
-            if (seq_list[seq_index][0] == "R"):
-                status = self.Command_IO.do_command(seq_list[seq_index][1])
+            print(seq_list[seq_index][i][0])
+            print(seq_list[seq_index][i][1])
+            if (seq_list[seq_index][i][0] == "R"):
+                status = self.Command_IO.do_command(seq_list[seq_index][i][1])
                 if (status != ErrorCode.OK):
                     return status
             else:
-                match (seq_list[seq_index][1]):
-                    case "say":
+                match (seq_list[seq_index][i][1]):
+                    case "say_wait":
                         self.engine.say("I will speak this text")
                         self.engine.runAndWait()
+                    case "say":
+                        self.engine.say("I will speak this text")
                     case _:
                         return ErrorCode.BAD_LOCAL_COMMAND
         return ErrorCode.OK

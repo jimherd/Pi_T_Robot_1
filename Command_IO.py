@@ -6,44 +6,47 @@ from enum import Enum, IntEnum
 from Globals import *
 
 class Command_IO:
-    def __init__(self):
-     #   super(Command_IO, self).__init__
-    #    self.parent = parent
-        self.ser = serial.Serial()
 
-        self.reply_string = ""
-        self.IO_status = ErrorCode.OK
-        self.argc = 0
+# data common to all instances of class
+    ser_1 = serial.Serial()     
+    reply_string = ""
+    argc = 0
+    int_parameters   = [0]   * MAX_COMMAND_PARAMETERS
+    float_parameters = [0.0] * MAX_COMMAND_PARAMETERS
+    parameter_type  = [0]    * MAX_COMMAND_PARAMETERS
 
-        self.int_parameters   = [0]   * MAX_COMMAND_PARAMETERS
-        self.float_parameters = [0.0] * MAX_COMMAND_PARAMETERS
-        self.parameter_type  = [0]    * MAX_COMMAND_PARAMETERS
-
+# class functions
     def open_port(self, port, baud_rate):
-        self.ser.baudrate = baud_rate
-        self.ser.timeout = READ_TIMEOUT
-        self.ser.port = port
-        self.ser.timeout = 5
+        self.ser_1.baudrate = baud_rate
+        self.ser_1.timeout = READ_TIMEOUT
+        self.ser_1.port = port
+        self.ser_1.timeout = 5
         try:
-            self.ser.open()
+            self.ser_1.open()
         except serial.SerialException:
             return ErrorCode.BAD_COMPORT_OPEN
-        self.ser.reset_input_buffer()
-        self.ser.timeout = 5
+        self.ser_1.reset_input_buffer()
+        self.ser_1.timeout = 5
         return ErrorCode.OK
 
     def close_port(self):
-        self.ser.close()
+        self.ser_1.close()
         return ErrorCode.OK
+    
+    def set_port(self, port_name):
+        self.ser_1.port = port_name
+    
+    def port_is_open(self) -> bool:
+        return self.ser_1.is_open
 
     def send_command(self, send_string):
-        if(self.ser.is_open == False):
+        if(self.ser_1.is_open == False):
             return ErrorCode.BAD_COMPORT_WRITE
-        self.ser.write(str.encode(send_string)) # convert to bytes
+        self.ser_1.write(str.encode(send_string)) # convert to bytes
         return ErrorCode.OK
 
     def get_reply(self) -> ErrorCode:
-        self.reply_string = self.ser.read_until(b'\n', 50)
+        self.reply_string = self.ser_1.read_until(b'\n', 50)
         if (len(self.reply_string) == 0):
             return ErrorCode.BAD_COMPORT_READ
         else:
@@ -52,6 +55,7 @@ class Command_IO:
         
 # execute a single command
     def do_command(self, cmd_string):
+        if DEBUG: print("do_command string = ", cmd_string)
         IO_status = self.send_command(cmd_string)
         if DEBUG: print("send_command status = ", IO_status)
         if(IO_status != ErrorCode.OK):

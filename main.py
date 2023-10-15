@@ -5,6 +5,7 @@ import serial.tools.list_ports
 import random
 import pyttsx3
 
+from playsound import playsound
 
 DEFAULT_PORT    =  9
 SPEED_THRESHOLD = 21
@@ -18,8 +19,12 @@ from Globals    import  *
 from Sequences  import  *
 
 class Pi_the_robot:
+
+    Command_IO = Command_IO()
+
     def __init__(self, parent=None):
-        self.Command_IO = Command_IO()
+        self.sequence = sequence()
+        playsound('C:/Media/Sound/Hello.mp3')
         ports = list(serial.tools.list_ports.comports())
         if (len(ports) == 0):
             print("No serial ports on system")
@@ -27,23 +32,27 @@ class Pi_the_robot:
         status = ErrorCode.BAD_COMPORT_OPEN
         for p in ports:
             the_port = str(p).split(" ")[0]
+            self.Command_IO.set_port(the_port)
             if DEBUG: print(the_port)
-            self.Command_IO.close_port()
+            if self.Command_IO.port_is_open():
+                self.Command_IO.close_port()
             status = self.Command_IO.open_port(the_port, BAUDRATE)
             if DEBUG: print("Open port status = ", status)
             if (status == ErrorCode.OK):
                 status = self.ping()
                 if DEBUG: print("Ping status = ", status)
                 if(status == ErrorCode.OK):
-                    port = str(p)
+                    port = the_port
                 else:
                     self.Command_IO.close_port()
                     continue
             else:
                 self.Command_IO.close_port()
                 continue
-        self.mouth_state = OFF
-        self.Mouth_on_off(ON, OFF)
+        #self.mouth_state = OFF
+        #self.Mouth_on_off(ON, OFF)
+        status = self.sequence.play_sequence(1)
+        print("Sequence run status = ", status)
 
 # End of initialisation code
 # ===========================================================================
@@ -58,15 +67,48 @@ class Pi_the_robot:
      
     def close_serial_port(self):
         self.Command_IO.close_port()
+        
+# test serial port for robot port
+    def find_Pi_the_robot_port(self):
+        ports = list(serial.tools.list_ports.comports())
+        if (len(ports) == 0):
+            print("No serial ports on system")
+            sys.exit()
+        status = ErrorCode.BAD_COMPORT_OPEN
+        for p in ports:
+            the_port = str(p).split(" ")[0]
+            self.Command_IO.set_port(the_port)
+            if DEBUG: print(the_port)
+            if self.Command_IO.port_is_open():
+                self.Command_IO.close_port()
+            status = self.Command_IO.open_port(the_port, BAUDRATE)
+            if DEBUG: print("Open port status = ", status)
+            if (status == ErrorCode.OK):
+                status = self.ping()
+                if DEBUG: print("Ping status = ", status)
+                if(status == ErrorCode.OK):
+                    port = the_port
+                else:
+                    self.Command_IO.close_port()
+                    continue
+            else:
+                self.Command_IO.close_port()
+                continue
+
 
 # ===========================================================================
 # ping code
     def ping(self):
-        self.cmd_string = "ping 0 " + str(random.randint(1,98)) + "\n"
+        ping_value = random.randint(1,98)
+        self.cmd_string = "ping 0 " + str(ping_value) + "\n"
         status = ErrorCode.OK
         status = self.Command_IO.do_command(self.cmd_string)
-        if DEBUG: print("First value = ", self.Command_IO.get_reply_value(2))
-        if DEBUG: print("do_command status = ", status)
+        if (status == ErrorCode.OK):
+            ping_reply = self.Command_IO.get_reply_value(2)
+            if DEBUG: print("First value = ", ping_reply)
+            if (ping_reply != (ping_value + 1)):
+                status = ErrorCode.PING_FAIL
+            if DEBUG: print("do_command status = ", status)
         return status
     
 # ===========================================================================
