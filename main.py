@@ -3,6 +3,7 @@ import sys
 import serial
 import serial.tools.list_ports
 import random
+import time
 import pyttsx3
 
 from playsound import playsound
@@ -17,14 +18,16 @@ ON  = 1
 from Command_IO import  *
 from Globals    import  *
 from Sequences  import  *
+from Sound_out  import  *
 
 class Pi_the_robot:
 
     Command_IO = Command_IO()
+    Sound_out  = Sound_out()
 
     def __init__(self, parent=None):
         self.sequence = sequence()
-        playsound('C:/Media/Sound/Hello.mp3')
+        self.Sound_out.play_sound_file("C:/Media/Sound/Hello.mp3", True)
         ports = list(serial.tools.list_ports.comports())
         if (len(ports) == 0):
             print("No serial ports on system")
@@ -53,6 +56,7 @@ class Pi_the_robot:
         #self.Mouth_on_off(ON, OFF)
         status = self.sequence.play_sequence(1)
         print("Sequence run status = ", status)
+        time.sleep(10)
 
 # End of initialisation code
 # ===========================================================================

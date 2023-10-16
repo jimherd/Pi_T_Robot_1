@@ -89,6 +89,7 @@ class ErrorCode(Enum):
     BAD_SEQUENCE_NUMBER             = -207
     BAD_LOCAL_COMMAND               = -208
     PING_FAIL                       = -209
+    BAD_SOUND_FILE                  = -210
 
 # modes for string parse routine
 class Modes(IntEnum):

@@ -1,23 +1,29 @@
 
-from Globals import *
+from Globals    import *
 from Command_IO import *
+from Sound_out  import  *
 
 import pyttsx3
+
+from playsound import playsound
 
 # ===========================================================================
 # Command sequences
 
 seq_0 = [               # seq 0
+    [ "L", "say", "Sequence 0"] ,
     [ "R", "ping 0 34\n" ] 
 ]
  
 seq_1 = [              # seq 1
+    [ "L", "say", "Sequence 1"] ,
     [ "R", "ping 0 41\n" ] ,
     [ "R", "servo 9 0 4 30\n" ] ,
-    [ "L", "say", "Hello jim"]
+    [ "L", "play", "C:/Media/Sound/Hello.mp3"]
 ]
 
 seq_2 = [             # seq 2
+    [ "L", "say", "Sequence 2"] ,
     [ "R", "ping 0 51\n" ] ,
     [ "L", "say", "Hello jim"]
 ]
@@ -29,7 +35,8 @@ seq_list = [seq_0, seq_1, seq_2]
 class sequence:
     def __init__(self):
         self.Command_IO = Command_IO()
-        self.engine = pyttsx3.init()
+        self.Sound_out = Sound_out()
+ 
         self.nos_sequences = len(seq_list)
 
     def play_sequence(self, seq_index) -> ErrorCode:
@@ -47,10 +54,11 @@ class sequence:
             else:
                 match (seq_list[seq_index][i][1]):
                     case "say_wait":
-                        self.engine.say("I will speak this text")
-                        self.engine.runAndWait()
+                        self.Sound_out.speak_text(seq_list[seq_index][i][2], True)
                     case "say":
-                        self.engine.say("I will speak this text")
+                        self.Sound_out.speak_text(seq_list[seq_index][i][2], True)
+                    case "play":
+                        self.Sound_out.play_sound_file(seq_list[seq_index][i][2], True)
                     case _:
                         return ErrorCode.BAD_LOCAL_COMMAND
         return ErrorCode.OK
