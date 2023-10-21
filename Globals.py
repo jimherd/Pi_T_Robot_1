@@ -49,6 +49,7 @@ class ServoCommands(IntEnum):
     RUN_SYNC_MOVES     = 4
     STOP               = 5
     STOP_ALL           = 6
+    DISABLE            = 7
 
 class StepperCommands(IntEnum):
     REL_MOVE           = 0

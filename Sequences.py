@@ -4,6 +4,7 @@ from Command_IO import *
 from Sound_out  import  *
 
 import pyttsx3
+import time
 
 from playsound import playsound
 
@@ -19,7 +20,11 @@ seq_1 = [              # seq 1
     [ "L", "say", "Sequence 1"] ,
     [ "R", "ping 0 41\n" ] ,
     [ "R", "servo 9 0 4 30\n" ] ,
-    [ "L", "play", "C:/Media/Sound/Hello.mp3"]
+    [ "R", "servo 9 7 8 0\n" ] ,
+    [ "R", "servo 9 0 8 30\n" ] ,
+    [ "L", "play", "C:/Media/Sound/Hello.mp3"] ,
+    [ "L", "sleep", 5 ] ,
+    [ "R", "servo 9 7 8 1\n" ] ,
 ]
 
 seq_2 = [             # seq 2
@@ -59,6 +64,8 @@ class sequence:
                         self.Sound_out.speak_text(seq_list[seq_index][i][2], True)
                     case "play":
                         self.Sound_out.play_sound_file(seq_list[seq_index][i][2], True)
+                    case "sleep":
+                        time.sleep(seq_list[seq_index][i][2])
                     case _:
                         return ErrorCode.BAD_LOCAL_COMMAND
         return ErrorCode.OK

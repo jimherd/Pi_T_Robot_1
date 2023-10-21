@@ -52,11 +52,9 @@ class Pi_the_robot:
             else:
                 self.Command_IO.close_port()
                 continue
+        self.sequence.play_sequence(1)
         #self.mouth_state = OFF
         #self.Mouth_on_off(ON, OFF)
-        status = self.sequence.play_sequence(1)
-        print("Sequence run status = ", status)
-        time.sleep(10)
 
 # End of initialisation code
 # ===========================================================================
