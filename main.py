@@ -8,17 +8,13 @@ import pyttsx3
 
 from playsound import playsound
 
-DEFAULT_PORT    =  9
-SPEED_THRESHOLD = 21
-NOS_SERVOS      =  8
-
-OFF = 0
-ON  = 1
-
 from Command_IO import  *
 from Globals    import  *
 from Sequences  import  *
 from Sound_out  import  *
+
+# ===========================================================================
+# main class
 
 class Pi_the_robot:
 
@@ -27,7 +23,7 @@ class Pi_the_robot:
 
     def __init__(self, parent=None):
         self.sequence = sequence()
-        self.Sound_out.play_sound_file("C:/Media/Sound/Hello.mp3", True)
+        self.Sound_out.play_sound_file(u"C:/Media/Sound/Hello.mp3", True)
         ports = list(serial.tools.list_ports.comports())
         if (len(ports) == 0):
             print("No serial ports on system")

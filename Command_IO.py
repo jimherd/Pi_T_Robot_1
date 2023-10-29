@@ -2,7 +2,8 @@
 
 import serial
 
-from enum import Enum, IntEnum
+from enum    import Enum, IntEnum
+
 from Globals import *
 
 class Command_IO:

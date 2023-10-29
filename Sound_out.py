@@ -1,12 +1,12 @@
 #
 import os.path
+import pyttsx3
+
+from playsound import playsound
 
 from Command_IO import  *
 from Globals    import  *
 from Sequences  import  *
-
-from playsound import playsound
-import pyttsx3
 
 class Sound_out:
 

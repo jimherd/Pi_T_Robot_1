@@ -21,11 +21,22 @@ current_platform_name  = "Unknown"
 # ===========================================================================
 # Global system constants
 
+NOS_SERVOS      =  9
+
 MAX_COMMAND_PARAMETERS    = 10
 READ_TIMEOUT              = 4  # seconds
 MAX_COMMAND_STRING_LENGTH = 100
 MAX_REPLY_STRING_LENGTH   = 100
 BAUDRATE                  = 115200
+
+DEFAULT_PORT    =  9
+SPEED_THRESHOLD = 21
+
+# ===========================================================================
+# Useful constants
+
+OFF = 0
+ON  = 1
 
 # ===========================================================================
 # System ENUM constants
