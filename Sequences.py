@@ -22,9 +22,9 @@ seq_1 = [              # seq 1
     [ "R", "servo 9 0 4 30\n" ] ,
     [ "R", "servo 9 8 8 1\n" ] ,
     [ "R", "servo 9 0 8 30\n" ] ,
-    [ "L", "play", u"C:/Media/Sound/Hello.mp3"] ,
-    [ "L", "sleep", 5 ] ,
-    [ "R", "servo 9 7 8 1\n" ] ,
+    [ "L", "play", u"C:/Media/Sound/Hello.mp3", True] ,
+ #   [ "L", "sleep", 5 ] ,
+    [ "R", "servo 9 8 8 0\n" ] ,
 ]
 
 seq_2 = [             # seq 2

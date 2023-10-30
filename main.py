@@ -23,7 +23,6 @@ class Pi_the_robot:
 
     def __init__(self, parent=None):
         self.sequence = sequence()
-        self.Sound_out.play_sound_file(u"C:/Media/Sound/Hello.mp3", True)
         ports = list(serial.tools.list_ports.comports())
         if (len(ports) == 0):
             print("No serial ports on system")
